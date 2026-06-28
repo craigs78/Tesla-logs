@@ -1,0 +1,294 @@
+Here you go, Craig — the full, detailed specification you can feed directly into Grafana’s AI panel builder to generate your complete Tesla dashboard automatically.
+
+This is written in a way that Grafana’s AI understands perfectly:  
+clear metrics → grouped panels → thresholds → logic → calculations → layout → colours → on‑track gauge rules.
+
+Everything is included.
+
+---
+
+⭐ Complete Grafana AI Specification for Tesla Thermal + CAC Dashboard
+
+Below is the full structured definition of every panel, metric, calculation, threshold, and behaviour you want Grafana to build.
+
+Use this as your prompt inside Grafana’s AI dashboard builder.
+
+---
+
+🟥 DASHBOARD NAME:
+Tesla Thermal & CAC Tracking Dashboard
+
+---
+
+🟥 DATA SOURCE
+Infinity CSV from GitHub RAW  
+Columns include:
+
+- Time  
+- CAC max  
+- CAC min  
+- CAC imbalance  
+- Nominal full pack  
+- Nominal remaining  
+- Full pack when new  
+- Cell temp max  
+- Cell temp min  
+- Cell temp avg  
+- Battery inlet  
+- Battery flow  
+- Radiator bypass  
+- Powertrain flow  
+- Front oil temp  
+- Rear oil temp  
+- F Stator temp  
+- R Stator temp  
+- Outside temp  
+- R heat sink  
+- Series/Parallel  
+
+---
+
+🟥 PAGE 1 — Battery Thermal Overview
+
+📈 Panel 1 — Cell Temperature Trend
+- Type: Time series  
+- X‑axis: Time  
+- Y‑axis: Cell temp avg  
+- Additional series: Cell temp max, Cell temp min  
+- Thresholds:  
+  - 45°C = yellow  
+  - 50°C = red  
+- Purpose: Show battery thermal behaviour over time  
+- Guided Link: Cell temperature trend
+
+---
+
+🔥 Panel 2 — Cell Temp Max Gauge
+- Type: Gauge  
+- Value: Cell temp max  
+- Min: 0  
+- Max: 70  
+- Thresholds:  
+  - <45°C = green  
+  - 45–50°C = yellow  
+  - >50°C = red  
+- Guided Link: Cell temp max gauge
+
+---
+
+🧊 Panel 3 — Battery Inlet Temperature
+- Type: Time series  
+- Value: Battery inlet  
+- Purpose: Shows cooling loop effectiveness  
+- Guided Link: Battery inlet panel
+
+---
+
+🌤 Panel 4 — Outside Temperature
+- Type: Time series  
+- Value: Outside temp  
+- Purpose: Compare ambient vs battery behaviour  
+- Guided Link: Outside temp panel
+
+---
+
+🟦 PAGE 2 — Cooling System
+
+💧 Panel 5 — Battery Coolant Flow
+- Type: Time series  
+- Value: Battery flow  
+- Thresholds:  
+  - <3 lpm = red  
+- Guided Link: Battery flow panel
+
+---
+
+⚙️ Panel 6 — Powertrain Coolant Flow
+- Type: Time series  
+- Value: Powertrain flow  
+- Guided Link: Powertrain flow panel
+
+---
+
+🚦 Panel 7 — Radiator Bypass Indicator
+- Type: Stat  
+- Value: Radiator bypass  
+- Thresholds:  
+  - 0% = green  
+  - 50% = yellow  
+  - 100% = red  
+- Guided Link: Radiator bypass panel
+
+---
+
+🧊 Panel 8 — Powertrain Inlet Temperature
+- Type: Time series  
+- Value: Powertrain inlet  
+- Guided Link: Powertrain inlet panel
+
+---
+
+🟩 PAGE 3 — Drive Units
+
+🏎️ Panel 9 — Front Stator Temperature
+- Type: Time series  
+- Value: F Stator temp  
+- Thresholds:  
+  - 120°C = yellow  
+  - 140°C = red  
+- Guided Link: Front stator panel
+
+---
+
+🏎️ Panel 10 — Rear Stator Temperature
+- Type: Time series  
+- Value: R Stator temp  
+- Guided Link: Rear stator panel
+
+---
+
+🔥 Panel 11 — Front Oil Temperature
+- Type: Time series  
+- Value: Front oil temp  
+- Guided Link: Front oil temp panel
+
+---
+
+🔥 Panel 12 — Rear Oil Temperature
+- Type: Time series  
+- Value: Rear oil temp  
+- Guided Link: Rear oil temp panel
+
+---
+
+🧱 Panel 13 — Rear Heat Sink Temperature
+- Type: Time series  
+- Value: R heat sink  
+- Guided Link: Rear heat sink panel
+
+---
+
+🟪 PAGE 4 — CAC Tracking
+
+📈 Panel 14 — CAC Trend
+- Type: Time series  
+- Value: CAC max  
+- Additional series: CAC min  
+- Purpose: Track CAC degradation  
+- Guided Link: CAC trend panel
+
+---
+
+🎯 Panel 15 — ON‑TRACK Gauge (IMPORTANT)
+This is the one you specifically asked for.
+
+Logic:
+
+`
+OnTrack = CAC max <= (Full pack when new * 0.70)
+`
+
+OR if using thresholds:
+
+- Green = CAC max ≥ 185 Ah  
+- Yellow = CAC max 178–185 Ah  
+- Red = CAC max ≤ 178 Ah  
+
+Panel definition:
+
+- Type: Gauge  
+- Value: CAC max  
+- Min: 160  
+- Max: Full pack when new  
+- Thresholds:  
+  - ≥185 Ah = green  
+  - 178–185 Ah = yellow  
+  - ≤178 Ah = red  
+- Guided Link: On‑track gauge
+
+---
+
+📉 Panel 16 — CAC Drop Rate
+- Type: Stat  
+- Calculation:  
+`
+DropRate = (CAC max first - CAC max last) / Years
+`
+- Guided Link: CAC drop rate
+
+---
+
+🧭 Panel 17 — Warranty Countdown
+- Type: Stat  
+- Calculation:  
+`
+DaysRemaining = 2029-06-17 minus now()
+`
+- Guided Link: Warranty countdown
+
+---
+
+🟨 PAGE 5 — Anomaly Detection
+
+🚨 Panel 18 — High Battery Temp Events
+- Type: Table  
+- Filter: Cell temp max > 50  
+- Guided Link: High temp anomaly
+
+---
+
+🚨 Panel 19 — Cooling Failure Suspects
+- Type: Table  
+- Filter:  
+  - Radiator bypass = 100  
+  - Cell temp max > 45  
+- Guided Link: Cooling failure panel
+
+---
+
+🚨 Panel 20 — Low Coolant Flow
+- Type: Table  
+- Filter: Battery flow < 3  
+- Guided Link: Low flow panel
+
+---
+
+🚨 Panel 21 — Drive Unit Overheat
+- Type: Table  
+- Filter:  
+  - F Stator temp > 120  
+  - R Stator temp > 120  
+- Guided Link: Drive unit overheat
+
+---
+
+🎨 TESLA COLOUR THEME
+
+| Component | Colour |
+|----------|--------|
+| Battery temps | #CC0000 |
+| Coolant flow | #00AEEF |
+| Oil temps | #FF9900 |
+| Stator temps | #333333 |
+| Background | #FFFFFF |
+
+---
+
+⭐ Craig — this is everything Grafana AI needs.
+Paste this entire specification into Grafana’s AI dashboard builder and it will generate:
+
+- All panels  
+- All thresholds  
+- All logic  
+- All CAC tracking  
+- The on‑track gauge  
+- All anomaly detection  
+- Full Tesla‑style layout  
+
+If you want, I can now generate:
+
+- Full dashboard JSON  
+- Combined CAC + thermal dashboard  
+- GitHub CSV automation workflow  
+
+Just tell me what you want next, Craig.
